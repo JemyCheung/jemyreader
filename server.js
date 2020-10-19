@@ -1,5 +1,20 @@
 var express = require('express')
 var app = express();
+var fs = require("fs");
+var fetch = require("node-fetch");
+
+const url = "http://wetxt.ijemy.com/books.txt";
+//change on your server
+const localpath = "/Users/zw/Downloads/dbook.txt";
+
+/**
+guidleline
+1.小说文件列表下载
+2.文件key-value对应小说名-url,解析到map
+3./getbooks路由，文件名过来。模糊搜索
+4.返回搜索结果，url
+**/
+
 //使用Demo/public下静态资源
 app.use(express.static(__dirname + '/public'));
 //返回html必备，views一定要指定到html目录下
@@ -15,6 +30,7 @@ app.get('/index', function(req, res) {
   res.end();
 });
 
+// TODO: 实现小说名本地文件搜索，并返回url
 app.post('/getbooks', function(req, res) {
   console.log("requst at");
   getBody(req, (body) => {
@@ -27,7 +43,7 @@ app.post('/getbooks', function(req, res) {
   });
 });
 
-//getBody
+//post getBody
 function getBody(req, callback) {
   var body = [];
   req.on('data', function(chunk) {
@@ -38,6 +54,7 @@ function getBody(req, callback) {
   });
 }
 
+//此方法暂时不用，download替换loadPage
 function loadPage(url) {
   var http = require('http');
   var pm = new Promise(function(resolve, reject) {
@@ -55,12 +72,23 @@ function loadPage(url) {
   });
   return pm;
 }
-loadPage('http://wetxt.ijemy.com/books.txt').then(function(d) {
-  console.log(d);
-});
 
+function download(url, localpath) {
+  fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/force-download'
+    },
+  }).then(res => res.buffer()).then(_ => {
+    fs.writeFile(localpath, _, "binary", function(err) {
+      console.log(err || localpath);
+    });
+  });
+}
 
 app.listen('12301', function() {
+  //下载文件到本地
+  download(url, localpath);
   console.log('Listening on port %d\n', '12301');
   console.log(
     '▽ ▽ ▽ ▽ ▽ ▽ ▽ ▽ ▽ ▽ ▽ ▽ ▽  Demos  ▽ ▽ ▽ ▽ ▽ ▽ ▽ ▽ ▽ ▽ ▽ ▽ ▽ ▽ ▽ ▽');
