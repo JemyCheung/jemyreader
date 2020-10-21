@@ -22,7 +22,6 @@ exports dealwithTxt = function() {
 
 /**工具类：部署后，文件拉取
 download dbook.txt
-
 **/
 
 function downloadTxt() {
@@ -31,7 +30,7 @@ function downloadTxt() {
 }
 
 /**
-读取本地的dbook.txt，根据传如的文件名搜索，返回对应的url
+读取本地的dbook.txt，根据传入的文件名搜索，返回对应的url
 **/
 exports.searchBooks = function(bookname, callback) {
   const r1 = readline.createInterface({
