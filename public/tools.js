@@ -2,6 +2,7 @@ const readline = require('readline');
 var conf = require('./config.js');
 //Readline是Node.js里实现标准输入输出的封装好的模块，通过这个模块我们可以以逐行的方式读取数据流。使用require(“readline”)可以引用模块。
 const fs = require('fs');
+var fetch = require("node-fetch");
 
 //dealwithTxt();
 /**工具类：部署前，资源处理
@@ -9,7 +10,7 @@ const fs = require('fs');
 2.用qshell从七牛进行list所有文件清单
 3.将list.txt文件进行处理，转换为“文件名 url格式”的txt文件newList.txt
 **/
-exports dealwithTxt = function() {
+exports.dealwithTxt = function() {
   const r1 = readline.createInterface({
     input: fs.createReadStream(conf.RESPATH)
   });
@@ -24,7 +25,7 @@ exports dealwithTxt = function() {
 download dbook.txt
 **/
 
-function downloadTxt() {
+exports.downloadTxt =function() {
   //下载文件到本地
   download(conf.WEBOOKS, conf.LOCALPATH);
 }
@@ -57,14 +58,11 @@ function download(url, localpath) {
   });
 }
 
-
-
 function getNewLine(line) {
   var y = line.indexOf(".mobi"); //y will also be 4
   var newLine = line.substr(0, y + 5);
   return newLine + " " + conf.WEURL + newLine + "\n";
 }
-
 
 function writeFile(filePath, contents) {
   fs.appendFile(filePath, contents, (error) => {

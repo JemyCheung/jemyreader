@@ -1,7 +1,7 @@
 var express = require('express')
 var app = express();
 var fs = require("fs");
-var fetch = require("node-fetch");
+
 var conf = require("./public/config.js");
 var tools = require("./public/tools.js");
 

@@ -1,5 +1,5 @@
 const should = require('should');
-var tools = require('./tools.js');
+var tools = require('./public/tools.js');
 
 describe('test tools', function() {
 
@@ -13,6 +13,11 @@ describe('test tools', function() {
     tools.searchBooks(bookname, (url) => {
       console.log(url);
     });
+    done();
+  });
+
+  it('test downloadTxt', function(done) {
+    tools.downloadTxt();
     done();
   });
 });
