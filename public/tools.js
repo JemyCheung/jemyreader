@@ -40,6 +40,7 @@ exports.searchBooks = function(bookname, callback) {
   r1.on('line', function(line) { //事件监听
     if (line.includes(bookname)) {
       var y = line.indexOf(".mobi"); //y will also be 4
+      console.log(line.substr(y + 5));
       callback(line.substr(y + 5));
     }
   });

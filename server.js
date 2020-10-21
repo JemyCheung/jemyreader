@@ -29,8 +29,8 @@ app.post('/getbooks', function(req, res) {
     //搜索小说，并将url返回
     tools.searchBooks(bookname, (url) => {
       res.write(url);
+      res.end();
     });
-    res.end();
   });
 });
 
