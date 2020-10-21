@@ -2,18 +2,8 @@ var express = require('express')
 var app = express();
 var fs = require("fs");
 var fetch = require("node-fetch");
-
-const url = "http://wetxt.ijemy.com/books.txt";
-//change on your server
-const localpath = "/Users/zw/Downloads/dbook.txt";
-
-/**
-guidleline
-1.小说文件列表下载
-2.文件key-value对应小说名-url,解析到map
-3./getbooks路由，文件名过来。模糊搜索
-4.返回搜索结果，url
-**/
+var conf = require("./public/config.js");
+var tools = require("./public/tools.js");
 
 //使用Demo/public下静态资源
 app.use(express.static(__dirname + '/public'));
@@ -35,10 +25,11 @@ app.post('/getbooks', function(req, res) {
   console.log("requst at");
   getBody(req, (body) => {
     var body = JSON.parse(body);
-    console.log(body);
     var bookname = body.bookname;
     //搜索小说，并将url返回
-    res.write("http://wetxt.ijemy.com/%E7%AC%AC%E4%B8%83%E5%A4%A9_%E4%BD%99%E5%8D%8E.mobi");
+    tools.searchBooks(bookname, (url) => {
+      res.write(url);
+    });
     res.end();
   });
 });
@@ -54,41 +45,7 @@ function getBody(req, callback) {
   });
 }
 
-//此方法暂时不用，download替换loadPage
-function loadPage(url) {
-  var http = require('http');
-  var pm = new Promise(function(resolve, reject) {
-    http.get(url, function(res) {
-      var html = '';
-      res.on('data', function(d) {
-        html += d.toString()
-      });
-      res.on('end', function() {
-        resolve(html);
-      });
-    }).on('error', function(e) {
-      reject(e)
-    });
-  });
-  return pm;
-}
-
-function download(url, localpath) {
-  fetch(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/force-download'
-    },
-  }).then(res => res.buffer()).then(_ => {
-    fs.writeFile(localpath, _, "binary", function(err) {
-      console.log(err || localpath);
-    });
-  });
-}
-
 app.listen('12301', function() {
-  //下载文件到本地
-  download(url, localpath);
   console.log('Listening on port %d\n', '12301');
   console.log(
     '▽ ▽ ▽ ▽ ▽ ▽ ▽ ▽ ▽ ▽ ▽ ▽ ▽  Demos  ▽ ▽ ▽ ▽ ▽ ▽ ▽ ▽ ▽ ▽ ▽ ▽ ▽ ▽ ▽ ▽');
