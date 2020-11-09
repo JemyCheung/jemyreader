@@ -1,46 +1,64 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="zh" class="no-js">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<title>Books List</title>
+		<link rel="icon" href="http://wetxt.ijemy.com/favicon.ico" type="image/x-icon" />
+		<link rel="stylesheet" type="text/css" href="../css/component.css">
+		<link href="../css/bootstrap.css" rel="stylesheet">
+	  <script src="../js/jquery.min.js"></script>
+	  <script src="../js/bootstrap.js"></script>
+	  <script type="text/javascript">
+	    function searchbooks() {
+	      var bookname = $("#bookid").val().trim();
+	      var jsonData = {
+	        "bookname": bookname,
+	      };
+	      var data = JSON.stringify(jsonData);
+	      $.ajax({
+	        url: '/getbooks',
+	        type: 'POST',
+	        async: false,
+	        data: data,
+	        success: function(data) {
+	          bookurl = data;
+						bookurl.split('\n').forEach((item, i) => {
+							$("#bookurl").append('<a href="' + item + '">' + item + '</a></br>');
+						});
+	        }
+	      });
+	    }
+	  </script>
+	</head>
+	<body>
+		<span id="bookurl"></span>
+		<div class="container">
+			<div class="morphsearch open">
+				<div class="morphsearch-div">
+					<input class="morphsearch-input" type="search" id="bookid" placeholder="请输入小说名">
+					<button class="morphsearch-submit" onclick="searchbooks()">Search</button></br>
+					<span id="bookurl"></span>
+				</div>
+				<div class="morphsearch-content">
+					<div class="dummy-column">
+						<h2>科幻</h2>
+						<a class="dummy-media-object" href="http://twitter.com/SaraSoueidan">
+							<img class="round" src="../img/thumbs/head1.jpg" alt="Sara Soueidan">
+							<h3>三体</h3>
+						</a>
+					</div>
+					<div class="dummy-column">
+						<h2>悬疑</h2>
+						<a class="dummy-media-object" href="http://twitter.com/SaraSoueidan">
+							<img class="round" src="../img/thumbs/head1.jpg" alt="Sara Soueidan">
+							<h3>白夜行</h3>
+						</a>
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Books List</title>
-  <link rel="icon" href="http://wetxt.ijemy.com/favicon.ico" type="image/x-icon" />
-  <link href="../css/bootstrap.css" rel="stylesheet">
-  <script src="../js/jquery.min.js"></script>
-  <script src="../js/bootstrap.js"></script>
-  <script type="text/javascript">
-    function searchbooks() {
-      var bookname = $("#bookid").val().trim();
-      var jsonData = {
-        "bookname": bookname,
-      };
-      var data = JSON.stringify(jsonData);
-      $.ajax({
-        url: '/getbooks',
-        type: 'POST',
-        async: false,
-        data: data,
-        success: function(data) {
-          bookurl = data;
-          $("#bookurl").html('<a href="' + bookurl + '">' + bookurl + '</a>');
-        }
-      });
-    }
-  </script>
-  <style>
-    .row-centered {
-      text-align: center;
-    }
-  </style>
-</head>
+					</div>
+				</div>
+			</div>
 
-<body>
-  <div class="input-group row-centered">
-    <input type="text" class="form-control" placeholder="" id="bookid">
-    <button type="button" class="btn btn-primary" onclick="searchbooks()" data-trigger="focus" id="searchbooks">搜索</button></br>
-    <span id="bookurl"></span>
-  </div>
-</body>
-
+		</div>
+	</body>
 </html>

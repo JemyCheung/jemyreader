@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Books List</title>
+  <link rel="icon" href="http://wetxt.ijemy.com/favicon.ico" type="image/x-icon" />
+  <link href="../css/bootstrap.css" rel="stylesheet">
+  <script src="../js/jquery.min.js"></script>
+  <script src="../js/bootstrap.js"></script>
+  <script type="text/javascript">
+  function searchbooks() {
+    var bookname = $("#bookid").val().trim();
+    var jsonData = {
+      "bookname": bookname,
+    };
+    var data = JSON.stringify(jsonData);
+    $.ajax({
+      url: '/getbooks',
+      type: 'POST',
+      async: false,
+      data: data,
+      success: function(data) {
+        bookurl = data;
+        bookurl.split('\n').forEach((item, i) => {
+          $("#bookurl").append('<a href="' + item + '">' + item + '</a></br>');
+        });
+      }
+    });
+  }
+  </script>
+  <style>
+    .row-centered {
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="input-group row-centered">
+    <input type="text" class="form-control" placeholder="" id="bookid">
+    <button type="button" class="btn btn-primary" onclick="searchbooks()" data-trigger="focus" id="searchbooks">搜索</button></br>
+    <span id="bookurl"></span>
+  </div>
+</body>
+
+</html>
