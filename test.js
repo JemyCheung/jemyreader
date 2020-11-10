@@ -3,8 +3,9 @@ var tools = require('./public/tools.js');
 
 describe('test tools', function() {
 
+//TXT,azw3,mobi,txt,Txt,epub,pdf
   it('test dealwithTxt', function(done) {
-    tools.dealwithTxt('.mobi');
+    tools.dealwithTxt('.pdf');
     done();
   });
 

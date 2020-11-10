@@ -14,10 +14,13 @@ exports.dealwithTxt = function(postfix) {
   const r1 = readline.createInterface({
     input: fs.createReadStream(conf.RESPATH)
   });
-  r1.on('line', function(line,postfix) { //事件监听
-    var newLine = getNewLine(line);
-    //写入新的文件 newList.txt
-    writeFile(conf.LOCALPATH, newLine);
+  r1.on('line', function(line) { //事件监听
+    if (line.includes(postfix)) {
+      console.log(line);
+      var newLine = getNewLine(line, postfix);
+      //写入新的文件 newList.txt
+      writeFile(conf.LOCALPATH, newLine);
+    }
   });
 }
 
@@ -65,16 +68,16 @@ function download(url, localpath) {
   });
 }
 
-function getNewLine(line,postfix) {
-  var y = line.indexOf(postfix); //y will also be 4
-  var newLine = line.substr(0, y + 5);
+function getNewLine(line, postfix) {
+  var x = postfix.length;
+  var y = line.indexOf(postfix);
+  var newLine = line.substr(0, y + x);
   return newLine + " " + conf.WEURL + newLine + "\n";
 }
 
 function writeFile(filePath, contents) {
   fs.appendFile(filePath, contents, (error) => {
     if (error) return console.log("追加文件失败" + error.message);
-    console.log("追加成功");
   });
 }
 
@@ -85,7 +88,7 @@ exports.deleteNoUse = function() {
 
   r1.on('line', function(line) { //事件监听
     if (line.length != 32) {
-      line+='\n';
+      line += '\n';
       writeFile(conf.NEWLOCALPATH, line);
     }
 
