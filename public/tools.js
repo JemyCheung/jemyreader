@@ -36,6 +36,7 @@ exports.downloadTxt = function() {
 
 /**
 读取本地的dbook.txt，根据传入的文件名搜索，返回对应的url
+TXT,azw3,mobi,txt,Txt,epub,pdf
 **/
 exports.searchBooks = function(bookname, callback) {
   const r1 = readline.createInterface({
@@ -44,9 +45,29 @@ exports.searchBooks = function(bookname, callback) {
   var resbooks = '';
   r1.on('line', function(line) { //事件监听
     if (line.includes(bookname)) {
-      var y = line.indexOf(".mobi"); //y will also be 4
-      console.log(line.substr(y + 5));
-      resbooks = resbooks + line.substr(y + 5) + "\n";
+      var postfix;
+      if (line.includes('.mobi')) {
+        postfix = '.mobi';
+      }
+      if (line.includes('.azw3')) {
+        postfix = '.azw3';
+      }
+      if (line.includes('.TXT')) {
+        postfix = '.TXT';
+      }
+      if (line.includes('.txt')) {
+        postfix = '.txt';
+      }
+      if (line.includes('.Txt')) {
+        postfix = '.Txt';
+      }
+      if (line.includes('.pdf')) {
+        postfix = '.pdf';
+      }
+      var x = postfix.length;
+      var y = line.indexOf(postfix); //y will also be 4
+      console.log(line.substr(y + x));
+      resbooks = resbooks + line.substr(y + x) + "\n";
     }
 
   });

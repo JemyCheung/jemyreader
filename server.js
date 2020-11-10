@@ -13,11 +13,22 @@ app.set('views', __dirname + '/public/views');
 
 //index.html
 app.get('/index', function(req, res) {
+  var deviceAgent = req.headers["user-agent"].toLowerCase();
+  console.log(deviceAgent);
+  var agentID = deviceAgent.match(/(iphone|ipod|ipad|android)/);
   console.log("requst at");
-  res.render('index.html', {
+    if(agentID){
+        console.log("手机访问");
+        res.render('index.html', {
+        });
+        res.end();
+    }else{
+        console.log("电脑访问");
+        res.render('sorry404.html', {
+        });
+        res.end();
+    }
 
-  });
-  res.end();
 });
 
 // TODO: 实现小说名本地文件搜索，并返回url
